@@ -7,51 +7,57 @@ import JobApplication from "../models/JobApplication.js";
 import User from "../models/User.js";
 
 
-export const registerCompany = async (req,res) => {
-    const {name, email, password} = req.body
+export const registerCompany = async (req, res) => {
+    const { name, email, password } = req.body;
     const imageFile = req.file;
+
     if (!name || !email || !password || !imageFile) {
-        return res.json({success : false, message : "Missing Details"})
+        return res.json({ success: false, message: "Missing Details" });
     }
 
     try {
-        const companyExist = await Company.findOne({email})
+        const companyExist = await Company.findOne({ email });
         if (companyExist) {
-            return res.json({success : false, message : "Company already registered."})
+            return res.json({ success: false, message: "Company already registered." });
         }
 
-        const salt = await bcrypt.genSalt(10)
-        const hashPassword = await bcrypt.hash(password, salt)
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
 
-        const imageUpload = await cloudinary.uploader.upload(imageFile.path)
+        // Upload image buffer via stream (memoryStorage has no .path)
+        const imageUrl = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'company_logos', resource_type: 'image' },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result.secure_url);
+                }
+            );
+            stream.end(imageFile.buffer);
+        });
 
         const company = await Company.create({
             name,
             email,
-            password : hashPassword,
-            image : imageUpload.secure_url
-        })
+            password: hashPassword,
+            image: imageUrl,
+        });
 
         res.json({
-            success : true,
-            company : {
-                _id : company._id,
-                name : company.name,
-                email : company.email,
-                image : company.image
+            success: true,
+            company: {
+                _id: company._id,
+                name: company.name,
+                email: company.email,
+                image: company.image,
             },
-            token : generateToken(company._id)
-        })
-
+            token: generateToken(company._id),
+        });
 
     } catch (error) {
-        res.json({
-            success : false,
-            message : error.message
-        })
+        res.json({ success: false, message: error.message });
     }
-
-}
+};
 
 export const loginCompany = async (req,res) => {
     const {email, password} = req.body
