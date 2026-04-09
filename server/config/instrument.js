@@ -2,7 +2,7 @@
 import * as Sentry from "@sentry/node"
 
 Sentry.init({
-  dsn: "https://ba11e73dff01deee43964fa07c11f575@o4509623316119552.ingest.us.sentry.io/4509623322083328",
+  dsn: process.env.SENTRY_DSN,
   integrations: [
     Sentry.mongooseIntegration()
   ],

@@ -18,8 +18,8 @@ const JobCards = ({ job }) => {
        </div>
        <p  className='text-gray-500 text-sm mt-4'dangerouslySetInnerHTML={{__html:job.description.slice(0,150)}}></p>
        <div className='mt-4 flex gap-4 text-sm'>
-        <button onClick={()=> {navigate(`/apply-job/${job._id}`); scrollTo(0,0)}} className='bg-blue-600 text-white px-4 py-2 rounded'>Apply Now</button>
-        <button onClick={()=> {navigate(`/apply-job/${job._id}`); scrollTo(0,0)}} className='text-gray-500 border border-gray-500 rounded px-4 py-2'>Learn more</button>
+        <button onClick={()=> {navigate(`/apply-job/${job._id}`); scrollTo(0,0)}} className='bg-blue-600 text-white px-4 py-2 rounded transition-all duration-200 hover:bg-blue-700 hover:shadow-md active:scale-95'>Apply Now</button>
+        <button onClick={()=> {navigate(`/apply-job/${job._id}`); scrollTo(0,0)}} className='text-gray-500 border border-gray-500 rounded px-4 py-2 transition-all duration-200 hover:bg-gray-100 hover:text-gray-700 hover:border-gray-700 active:scale-95'>Learn more</button>
        </div> 
     </div>
   )

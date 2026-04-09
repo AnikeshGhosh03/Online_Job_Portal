@@ -77,7 +77,7 @@ const JobListing = () => {
 
         <button
           onClick={e => setShowFilter(prev => !prev)}
-          className='px-6 py-1.5 rounded border border-gray-400 lg:hidden'
+          className='px-6 py-1.5 rounded border border-gray-400 lg:hidden transition-all duration-200 hover:bg-gray-100 hover:border-gray-600 active:scale-95'
         >
           {showFilter ? "Close" : "Filters"}
         </button>
